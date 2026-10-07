@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Letters</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #F3EEE4;
+            --text: #111111;
+            --accent-1: #FF3B1F;
+            --accent-2: #1C2B8F;
+            --accent-3: #FFD2C4;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'DM Mono', ui-monospace, monospace;
+            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        body {
+            position: relative;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .back-button {
+            position: fixed;
+            top: 24px;
+            left: 24px;
+            z-index: 10;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            margin: -8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'DM Mono', ui-monospace, monospace;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            color: var(--text);
+            opacity: 0.7;
+            transition: opacity 0.2s ease;
+        }
+
+        .back-button:hover {
+            opacity: 1;
+        }
+
+        .back-button:active {
+            opacity: 0.5;
+        }
+
+        .content-wrapper {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 0 40px;
+        }
+
+        .scroll-container {
+            position: relative;
+            width: 60vw;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .text-content {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow-y: scroll;
+            scroll-behavior: smooth;
+            padding: 0;
+            /* Hide scrollbar */
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .text-content::-webkit-scrollbar {
+            display: none;
+        }
+
+        .text-inner {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 50vh 0;
+        }
+
+        .text-inner p {
+            margin: 0;
+            padding: 0 24px;
+            line-height: 1.8;
+            font-size: 16px;
+            letter-spacing: 0.02em;
+            text-align: justify;
+            text-align-last: justify;
+            -webkit-text-align-last: justify;
+            word-break: break-word;
+            hyphens: auto;
+            transition: filter 0.15s ease-out;
+            filter: blur(0px);
+            max-width: 100%;
+        }
+
+        .text-inner p + p {
+            margin-top: 1.2em;
+        }
+
+        .page-transition {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            pointer-events: none;
+            opacity: 0;
+            visibility: hidden;
+            background: rgba(17, 17, 17, 0.96);
+            transform: scale(1.02);
+            transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.6s ease;
+        }
+
+        .page-transition.is-active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        @media (max-width: 768px) {
+            .back-button {
+                top: 16px;
+                left: 16px;
+                font-size: 13px;
+            }
+
+            .content-wrapper {
+                padding: 50px 20px 20px;
+            }
+
+            .text-inner p {
+                font-size: 15px;
+                padding: 0 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .text-inner p {
+                font-size: 14px;
+                line-height: 1.7;
+                padding: 0 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-transition is-active" aria-hidden="true"></div>
+    <button class="back-button" onclick="navigateBack();">← Back</button>
+
+    <div class="content-wrapper">
+        <div class="scroll-container">
+            <div class="text-content" id="textContent">
+                <div class="text-inner" id="textInner">
+                    <p>Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                        Sarah ran her fingers along the mahogany desk, feeling the subtle texture of decades of use. This was her sanctuary, her place to think, to dream, to become whoever she wanted to be. The books whispered their secrets to anyone who would listen.She knew she would return tomorrow, and the day after that. The books would still be here, waiting, patient as stones, ready to share their inexhaustible treasures with anyone willing to listen.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="audio-controller.js"></script>
+    <script>
+        const textContent = document.getElementById('textContent');
+        const textInner = document.getElementById('textInner');
+        const transition = document.querySelector('.page-transition');
+
+        function navigateBack() {
+            if (!transition) {
+                window.location.href = 'index.html';
+                return;
+            }
+            transition.classList.add('is-active');
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 420);
+        }
+
+        window.addEventListener('load', () => {
+            requestAnimationFrame(() => {
+                if (transition) {
+                    transition.classList.remove('is-active');
+                }
+            });
+        });
+
+        const MAX_BLUR = 4;
+        const CLEAR_ZONE_HEIGHT = 300;
+
+        function wrapSentences() {
+            const paragraphs = textInner.querySelectorAll('p');
+
+            paragraphs.forEach((p) => {
+                if (p.dataset.processed === 'true') return;
+
+                const text = p.textContent;
+                const sentences = text.match(/[^.!?]*[.!?]+/g) || [text];
+
+                p.innerHTML = '';
+                sentences.forEach((sentence) => {
+                    const span = document.createElement('span');
+                    span.className = 'text-span';
+                    span.textContent = sentence;
+                    p.appendChild(span);
+                });
+
+                p.dataset.processed = 'true';
+            });
+        }
+
+        function updateBlurEffect() {
+            const spans = textInner.querySelectorAll('.text-span');
+            const screenHeight = window.innerHeight;
+            const clearZoneTop = (screenHeight - CLEAR_ZONE_HEIGHT) / 2;
+            const clearZoneBottom = clearZoneTop + CLEAR_ZONE_HEIGHT;
+
+            spans.forEach((span) => {
+                const rect = span.getBoundingClientRect();
+                const spanCenter = (rect.top + rect.bottom) / 2;
+                let blurAmount = 0;
+
+                if (spanCenter < clearZoneTop) {
+                    const distance = clearZoneTop - spanCenter;
+                    blurAmount = Math.min((distance / 150) * MAX_BLUR, MAX_BLUR);
+                } else if (spanCenter > clearZoneBottom) {
+                    const distance = spanCenter - clearZoneBottom;
+                    blurAmount = Math.min((distance / 150) * MAX_BLUR, MAX_BLUR);
+                }
+
+                span.style.filter = `blur(${blurAmount}px)`;
+            });
+        }
+
+        function initializeScroll() {
+            wrapSentences();
+
+            const firstSpan = textInner.querySelector('.text-span');
+            if (firstSpan) {
+                const firstSpanRect = firstSpan.getBoundingClientRect();
+                const containerHeight = textContent.clientHeight;
+                const targetScrollPosition = firstSpan.offsetTop - (containerHeight / 2 - firstSpanRect.height / 2);
+                textContent.scrollTop = Math.max(0, targetScrollPosition);
+            }
+
+            setTimeout(updateBlurEffect, 50);
+        }
+
+        textContent.addEventListener('scroll', updateBlurEffect);
+        window.addEventListener('load', initializeScroll);
+        window.addEventListener('resize', updateBlurEffect);
+    </script>
+</body>
+</html>

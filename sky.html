@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Night Sky</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <style>
+      :root {
+        --bg: #f3eee4;
+        --text: #111111;
+        --panel: rgba(255, 255, 255, 0.12);
+        --panel-border: rgba(17, 17, 17, 0.18);
+      }
+
+      * { box-sizing: border-box; }
+
+      html, body {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family: "DM Mono", ui-monospace, monospace;
+        overflow: hidden;
+      }
+
+      body {
+        position: relative;
+      }
+
+      .page-transition {
+        position: fixed;
+        inset: 0;
+        z-index: 2000;
+        pointer-events: none;
+        opacity: 0;
+        visibility: hidden;
+        background: rgba(17, 17, 17, 0.96);
+        transform: scale(1.02);
+        transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.6s ease;
+      }
+
+      .page-transition.is-active {
+        opacity: 1;
+        visibility: visible;
+        transform: scale(1);
+      }
+
+      .back-button {
+        position: fixed;
+        top: 24px;
+        left: 24px;
+        z-index: 1000;
+        background: rgba(146, 146, 146, 0.25);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        border-radius: 999px;
+        cursor: pointer;
+        padding: 9px 12px;
+        margin: 0;
+        font-family: "DM Mono", ui-monospace, monospace;
+        font-size: 14px;
+        letter-spacing: 0.04em;
+        color: #f3f3f3;
+        opacity: 0.9;
+        transition: opacity 0.2s ease, color 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+        backdrop-filter: blur(4px);
+        -webkit-backdrop-filter: blur(4px);
+      }
+
+      .back-button:hover { opacity: 1; }
+      .back-button:active { opacity: 0.7; }
+
+      .sky-shell {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 72px 24px 32px;
+        background: #000;
+        overflow: hidden;
+      }
+
+      .sky-video {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        filter: saturate(0.7) brightness(0.8);
+      }
+
+      .sky-card {
+        position: relative;
+        z-index: 1;
+        max-width: 760px;
+        text-align: center;
+      }
+
+      .sky-card h1 {
+        margin: 0 0 50px;
+        min-height: 1.2em;
+        display: block;
+        font-family: "Playfair Display", Georgia, serif;
+        font-size: clamp(32px, 4vw, 66px);
+        line-height: 0.96;
+        letter-spacing: -0.04em;
+        font-weight: 700;
+        color: #ffffff;
+        opacity: 1;
+        transform: translateY(0);
+        transition: opacity 0.18s ease, transform 0.18s ease;
+      }
+
+      .sky-card p {
+        margin: 0 0 26px;
+        font-size: 14px;
+        line-height: 1.7;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.8);
+      }
+
+      .sky-button {
+        display: inline-block;
+        border: 1px solid rgba(255, 255, 255, 0.32);
+        border-radius: 999px;
+        padding: 12px 22px;
+        background: rgba(255, 255, 255, 0.05);
+        color: #ffffff;
+        text-decoration: none;
+        font-family: "DM Mono", ui-monospace, monospace;
+        font-size: 12px;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        transition: background 0.2s ease, transform 0.2s ease;
+      }
+
+      .sky-button:hover {
+        background: rgba(255, 255, 255, 0.12);
+        transform: translateY(-1px);
+      }
+
+      @media (max-width: 640px) {
+        .back-button {
+          top: 16px;
+          left: 16px;
+          font-size: 13px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="page-transition" aria-hidden="true"></div>
+    <button class="back-button" type="button" onclick="navigateBack()">← Back</button>
+
+    <div class="sky-shell" aria-label="Night sky">
+      <video class="sky-video" autoplay muted loop playsinline aria-hidden="true">
+        <source src="stars.mp4" type="video/mp4" />
+      </video>
+      <div class="sky-card">
+        <h1 id="sky-line" aria-live="polite">Had I the heavens' embroidered cloths,</h1>
+        <a class="sky-button" href="https://skylitstudio.co.uk/night-sky/embed?lat=28.6139&lng=77.2088&date=2021-10-31&time=18:00&play=1&satellites=1" target="_blank" rel="noreferrer">Look at the stars, look how they shine for you!</a>
+      </div>
+    </div>
+
+    <script src="audio-controller.js"></script>
+    <script>
+      const transition = document.querySelector('.page-transition');
+      const embedUrl = 'https://skylitstudio.co.uk/night-sky/embed?lat=28.6139&lng=77.2088&date=2021-10-31&time=18:00&play=1&satellites=1';
+      const skyLines = [
+        "She walks in beauty, like the night",
+        "Of cloudless climes and starry skies;",
+        "And all that’s best of dark and bright",
+        "Meet in her aspect and her eyes;",
+        "Thus mellowed to that tender light",
+        "Which heaven to gaudy day denies."
+      ];
+
+      const skyLine = document.getElementById('sky-line');
+      let skyIndex = 0;
+      let skyTimer = null;
+
+      function showSkyLine(nextIndex) {
+        skyLine.style.opacity = '0';
+        skyLine.style.transform = 'translateY(8px)';
+
+        setTimeout(() => {
+          skyIndex = nextIndex;
+          skyLine.textContent = skyLines[skyIndex];
+          skyLine.style.opacity = '1';
+          skyLine.style.transform = 'translateY(0)';
+        }, 150);
+      }
+
+      function cycleSkyLine() {
+        const nextIndex = (skyIndex + 1) % skyLines.length;
+        showSkyLine(nextIndex);
+      }
+
+      function startSkyLoop() {
+        skyTimer = setInterval(() => {
+          const isLastLine = skyIndex === skyLines.length - 1;
+
+          if (isLastLine) {
+            clearInterval(skyTimer);
+            showSkyLine(0);
+            setTimeout(() => {
+              startSkyLoop();
+            }, 500);
+            return;
+          }
+
+          cycleSkyLine();
+        }, 1000);
+      }
+
+      function navigateBack() {
+        if (!transition) {
+          window.location.href = 'index.html';
+          return;
+        }
+        transition.classList.add('is-active');
+        setTimeout(() => {
+          window.location.href = 'index.html';
+        }, 420);
+      }
+
+      window.addEventListener('load', () => {
+        requestAnimationFrame(() => {
+          if (transition) transition.classList.remove('is-active');
+        });
+
+        skyLine.textContent = skyLines[0];
+        startSkyLoop();
+      });
+    </script>
+  </body>
+</html>
