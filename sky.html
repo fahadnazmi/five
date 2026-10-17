@@ -183,8 +183,17 @@
       ];
 
       const skyLine = document.getElementById('sky-line');
+      const skyButton = document.querySelector('.sky-button');
+      const originalSkyButtonText = skyButton.textContent;
       let skyIndex = 0;
       let skyTimer = null;
+
+      skyButton.addEventListener('pointerenter', () => {
+        skyButton.textContent = 'Look at the stars, how they were 5 years ago';
+      });
+      skyButton.addEventListener('pointerleave', () => {
+        skyButton.textContent = originalSkyButtonText;
+      });
 
       function showSkyLine(nextIndex) {
         skyLine.style.opacity = '0';
